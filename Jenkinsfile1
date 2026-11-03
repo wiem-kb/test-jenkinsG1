@@ -1,0 +1,50 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Recuperation du code source'
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Verification des fichiers'
+
+                sh 'test -f index.html'
+                sh 'test -f style.css'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Verification du fichier HTML'
+
+                sh 'grep -q "<html" index.html'
+                sh 'grep -q "<h1>" index.html'
+            }
+        }
+
+        stage('Delivery') {
+            steps {
+                echo 'Archivage du site web'
+
+                archiveArtifacts artifacts: '*.html, *.css'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline termine avec succes !'
+        }
+
+        failure {
+            echo 'Erreur detectee dans le pipeline !'
+        }
+    }
+}
