@@ -15,8 +15,8 @@ pipeline {
             steps {
                 echo 'Verification des fichiers'
 
-                sh 'test -f index.html'
-                sh 'test -f style.css'
+                bat 'test -f index.html'
+                bat 'test -f style.css'
             }
         }
 
